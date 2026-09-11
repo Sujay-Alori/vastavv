@@ -480,6 +480,7 @@ body {
   position: relative;
   width: 100%;
   height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
   margin-top: var(--header-height);
   overflow: hidden;
   display: block;
@@ -525,6 +526,7 @@ body {
   z-index: 10;
   opacity: 0;
   animation: heroLogoReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+  pointer-events: none;
 }
 
 .hero-logo {
@@ -551,11 +553,11 @@ body {
   }
 }
 
-/* Mobile Subtle Slow Zoom-Out (1.05 -> 1.00 over 14s) */
+/* Mobile Subtle Slow Zoom-Out (1.04 -> 1.00 over 14s to avoid excessive cropping) */
 @keyframes heroImageSlowZoomMobile {
   0% {
     opacity: 0;
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
   8% {
     opacity: 1;
@@ -590,6 +592,11 @@ body {
 
 /* Tablet Responsive */
 @media (max-width: 1024px) {
+  .hero-section {
+    height: calc(100vh - var(--header-height));
+    height: calc(100dvh - var(--header-height));
+  }
+
   .hero-image {
     object-position: center 38%;
   }
@@ -601,13 +608,24 @@ body {
 
 /* Mobile Responsive */
 @media (max-width: 640px) {
+  .hero-section {
+    height: calc(100vh - var(--header-height));
+    height: calc(100dvh - var(--header-height));
+  }
+
   .hero-image {
-    object-position: center 40%;
+    object-position: center 42%;
     animation: heroImageSlowZoomMobile 14s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   }
 
+  .hero-logo-overlay {
+    max-width: calc(100vw - 40px);
+    width: auto;
+  }
+
   .hero-logo {
-    width: clamp(180px, 52vw, 220px);
+    width: clamp(180px, 50vw, 220px);
+    max-width: 100%;
   }
 }
 

@@ -94,7 +94,7 @@ export default function Footer() {
                   onClick={handleScrollToProjects}
                   className="footer-link"
                 >
-                  PROJECTS
+                  PORTFOLIO
                 </a>
               </li>
               <li>

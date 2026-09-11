@@ -232,7 +232,7 @@ export default function Projects() {
         {/* Top Header matching reference hierarchy */}
         <div className="projects-header">
           <div className="projects-header-top">
-            <span className="projects-label">02 / PORTFOLIO</span>
+            <span className="projects-label">PORTFOLIO</span>
             <h2 className="projects-heading">SELECTED WORKS</h2>
           </div>
 

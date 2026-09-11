@@ -13,7 +13,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'HOME', href: '#' },
-  { label: 'PROJECTS', href: '#projects' },
+  { label: 'PORTFOLIO', href: '#projects' },
   {
     label: 'MAP',
     href: 'https://maps.app.goo.gl/Ln5wCoucCMv1qtwf8',

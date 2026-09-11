@@ -516,26 +516,24 @@ body {
   pointer-events: none;
 }
 
-/* Lower-left logo overlay */
+/* Centered logo overlay */
 .hero-logo-overlay {
   position: absolute;
-  bottom: 48px;
-  left: 56px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateY(14px);
   z-index: 10;
   opacity: 0;
-  transform: translateY(14px);
-  animation: heroCaptionReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+  animation: heroLogoReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
 }
 
 .hero-logo {
   display: block;
-  width: 170px;
+  width: clamp(280px, 28vw, 340px);
   height: auto;
   object-fit: contain;
   user-select: none;
   pointer-events: none;
-  /* Invert the dark logo to cream so it reads over the photography */
-  filter: invert(1);
 }
 
 /* Desktop / Universal Subtle Slow Zoom-Out (1.08 -> 1.00 over 14s) */
@@ -579,19 +577,25 @@ body {
   }
 }
 
+@keyframes heroLogoReveal {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+}
+
 /* Tablet Responsive */
 @media (max-width: 1024px) {
   .hero-image {
     object-position: center 38%;
   }
 
-  .hero-logo-overlay {
-    bottom: 36px;
-    left: 40px;
-  }
-
   .hero-logo {
-    width: 140px;
+    width: clamp(230px, 26vw, 280px);
   }
 }
 
@@ -602,13 +606,8 @@ body {
     animation: heroImageSlowZoomMobile 14s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   }
 
-  .hero-logo-overlay {
-    bottom: 24px;
-    left: 20px;
-  }
-
   .hero-logo {
-    width: 110px;
+    width: clamp(180px, 52vw, 220px);
   }
 }
 
@@ -620,8 +619,13 @@ body {
   }
 
   .hero-logo-overlay {
-    transform: none !important;
-    animation: heroCaptionFade 0.8s ease-in-out forwards !important;
+    transform: translate(-50%, -50%) translateY(0) !important;
+    animation: heroLogoFade 0.8s ease-in-out forwards !important;
+  }
+
+  @keyframes heroLogoFade {
+    0%  { opacity: 0; }
+    100%{ opacity: 1; }
   }
 
   @keyframes heroImageFade {

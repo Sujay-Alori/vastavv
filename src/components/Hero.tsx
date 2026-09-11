@@ -3,7 +3,7 @@ export default function Hero() {
     <section className="hero-section" aria-label="VASTAV Architectural & Interior Project">
       <div className="hero-image-wrapper">
         <img
-          src="/assets/images/hero%20(2).jpeg"
+          src="/assets/images/hero%20(2).png"
           alt="VASTAV Architectural & Interior Design"
           className="hero-image"
           loading="eager"

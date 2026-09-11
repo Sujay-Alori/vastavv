@@ -20,6 +20,9 @@ export default function Hero() {
             draggable={false}
           />
         </div>
+        <div className="hero-quote-overlay">
+          <p className="hero-quote">Spaces that belong to their place.</p>
+        </div>
       </div>
     </section>
   )

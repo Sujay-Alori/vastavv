@@ -1,15 +1,28 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 
 interface MenuOverlayProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const NAV_ITEMS = [
+interface NavItem {
+  label: string
+  href: string
+  externalUrl?: string
+}
+
+const NAV_ITEMS: NavItem[] = [
   { label: 'PROJECTS', href: '#projects' },
-  { label: 'MAP', href: '#map' },
+  {
+    label: 'MAP',
+    href: 'https://maps.app.goo.gl/Ln5wCoucCMv1qtwf8',
+    externalUrl: 'https://maps.app.goo.gl/Ln5wCoucCMv1qtwf8',
+  },
   { label: 'CONTACT', href: '#contact' },
 ]
+
+// Duration of the curtain close animation (must match CSS transition: 0.8s)
+const CURTAIN_CLOSE_MS = 820
 
 export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
   useEffect(() => {
@@ -22,6 +35,58 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
+
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
+      // External links (MAP): open in new tab and close the curtain
+      if (item.externalUrl) {
+        e.preventDefault()
+        window.open(item.externalUrl, '_blank', 'noopener,noreferrer')
+        onClose()
+        return
+      }
+
+      // Internal hash links (CONTACT, PROJECTS): smooth scroll after curtain closes
+      e.preventDefault()
+
+      const targetId = item.href.replace('#', '')
+      const target = document.getElementById(targetId)
+
+      // Close the curtain immediately
+      onClose()
+
+      if (!target) return
+
+      // Respect prefers-reduced-motion: skip delay when animations are off
+      const prefersReduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches
+      const delay = prefersReduced ? 0 : CURTAIN_CLOSE_MS
+
+      setTimeout(() => {
+        // Read header height from CSS custom property so it stays in sync
+        const headerHeightPx =
+          parseInt(
+            getComputedStyle(document.documentElement).getPropertyValue(
+              '--header-height'
+            ),
+            10
+          ) || 84
+
+        const elementTop =
+          target.getBoundingClientRect().top + window.scrollY
+
+        window.scrollTo({
+          top: elementTop - headerHeightPx,
+          behavior: prefersReduced ? 'auto' : 'smooth',
+        })
+
+        // Update the browser URL hash without triggering a jump
+        history.replaceState(null, '', item.href)
+      }, delay)
+    },
+    [onClose]
+  )
 
   return (
     <div
@@ -44,10 +109,10 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
                   href={item.href}
                   className="menu-nav-link"
                   tabIndex={isOpen ? 0 : -1}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    onClose()
-                  }}
+                  {...(item.externalUrl
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  onClick={(e) => handleNavClick(e, item)}
                 >
                   {item.label}
                 </a>

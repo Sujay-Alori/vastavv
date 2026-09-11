@@ -12,8 +12,15 @@ export default function Hero() {
           decoding="async"
         />
         <div className="hero-overlay" aria-hidden="true" />
-        <div className="hero-caption">
-          <span className="hero-caption-text">VASTAV ARCHITECTS</span>
+        <div className="hero-logo-overlay">
+          <img
+            src="/assets/brand/vastav-logo.png"
+            alt="VASTAV ARCHITECTS"
+            className="hero-logo"
+            width="2097"
+            height="750"
+            draggable={false}
+          />
         </div>
       </div>
     </section>

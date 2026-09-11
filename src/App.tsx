@@ -3,6 +3,7 @@ import Header from './components/Header'
 import MenuOverlay from './components/MenuOverlay'
 import Hero from './components/Hero'
 import Studio from './components/Studio'
+import Contact from './components/Contact'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -58,6 +59,7 @@ export default function App() {
           <main className="homepage" aria-label="VASTAV">
             <Hero />
             <Studio />
+            <Contact />
           </main>
         </>
       )}

@@ -45,7 +45,7 @@ export default function Studio() {
           </div>
           <div className="studio-right">
             <p className="studio-description">
-              VASTAV ARCHITECTS is an architectural and interior consultancy firm led by Principal Architect Ar. Shinu Nandanan, creating thoughtful spaces across Kerala and beyond.
+              With over 15 years of experience in architectural and interior design, Principal Architect Ar. Shinu Nandanan holds a Bachelor of Architecture (B.Arch.) degree from TKM College of Engineering, Kollam. Since 2012, he has been registered with the Council of Architecture (COA) and is affiliated with the Indian Institute of Architects (IIA), Cochin Chapter. His work spans numerous architectural and interior projects across Kerala and the Gulf countries, bringing together local insight and international experience.
             </p>
           </div>
         </div>

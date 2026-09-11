@@ -12,6 +12,7 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
+  { label: 'HOME', href: '#' },
   { label: 'PROJECTS', href: '#projects' },
   {
     label: 'MAP',
@@ -46,22 +47,32 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
         return
       }
 
-      // Internal hash links (CONTACT, PROJECTS): smooth scroll after curtain closes
+      // Internal links: smooth scroll after curtain closes
       e.preventDefault()
-
-      const targetId = item.href.replace('#', '')
-      const target = document.getElementById(targetId)
 
       // Close the curtain immediately
       onClose()
-
-      if (!target) return
 
       // Respect prefers-reduced-motion: skip delay when animations are off
       const prefersReduced = window.matchMedia(
         '(prefers-reduced-motion: reduce)'
       ).matches
       const delay = prefersReduced ? 0 : CURTAIN_CLOSE_MS
+
+      if (item.label === 'HOME' || item.href === '#') {
+        setTimeout(() => {
+          window.scrollTo({
+            top: 0,
+            behavior: prefersReduced ? 'auto' : 'smooth',
+          })
+          history.replaceState(null, '', window.location.pathname)
+        }, delay)
+        return
+      }
+
+      const targetId = item.href.replace('#', '')
+      const target = document.getElementById(targetId)
+      if (!target) return
 
       setTimeout(() => {
         // Read header height from CSS custom property so it stays in sync

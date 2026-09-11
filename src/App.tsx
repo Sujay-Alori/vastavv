@@ -3,7 +3,9 @@ import Header from './components/Header'
 import MenuOverlay from './components/MenuOverlay'
 import Hero from './components/Hero'
 import Studio from './components/Studio'
+import Projects from './components/Projects'
 import Contact from './components/Contact'
+import Footer from './components/Footer'
 
 export default function App() {
   const [progress, setProgress] = useState(0)
@@ -98,8 +100,10 @@ export default function App() {
       <main className="homepage" aria-label="VASTAV">
         <Hero />
         <Studio />
+        <Projects />
         <Contact />
       </main>
+      <Footer />
     </>
   )
 }

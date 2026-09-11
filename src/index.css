@@ -501,7 +501,7 @@ body {
   display: block;
   user-select: none;
   transform-origin: center center;
-  animation: heroImageSlowZoom 14s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: heroImageSlowZoom 10s ease-out forwards;
 }
 
 /* Subtle overlay preserving natural interior illumination */
@@ -538,13 +538,13 @@ body {
   pointer-events: none;
 }
 
-/* Desktop / Universal Subtle Slow Zoom-Out (1.08 -> 1.00 over 14s) */
+/* Desktop / Universal Subtle Medium-Speed Zoom-Out (1.08 -> 1.00 over 10s) */
 @keyframes heroImageSlowZoom {
   0% {
     opacity: 0;
     transform: scale(1.08);
   }
-  8% {
+  6% {
     opacity: 1;
   }
   100% {
@@ -553,13 +553,13 @@ body {
   }
 }
 
-/* Mobile Subtle Slow Zoom-Out (1.04 -> 1.00 over 14s to avoid excessive cropping) */
+/* Mobile Subtle Medium-Speed Zoom-Out (1.05 -> 1.00 over 10s) */
 @keyframes heroImageSlowZoomMobile {
   0% {
     opacity: 0;
-    transform: scale(1.04);
+    transform: scale(1.05);
   }
-  8% {
+  6% {
     opacity: 1;
   }
   100% {
@@ -615,7 +615,7 @@ body {
 
   .hero-image {
     object-position: center 42%;
-    animation: heroImageSlowZoomMobile 14s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    animation: heroImageSlowZoomMobile 10s ease-out forwards;
   }
 
   .hero-logo-overlay {

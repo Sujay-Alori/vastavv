@@ -541,7 +541,7 @@ body {
   display: block;
   user-select: none;
   transform-origin: center center;
-  animation: heroImageSlowZoom 9s ease-out forwards;
+  animation: heroImageSlowZoom 4.5s ease-out forwards;
 }
 
 /* Subtle overlay preserving natural interior illumination */
@@ -579,7 +579,7 @@ body {
   filter: brightness(0) invert(1);
 }
 
-/* Desktop Subtle Cinematic Zoom-Out (1.10 -> 1.00 over 9s) */
+/* Desktop Subtle Cinematic Zoom-Out (1.10 -> 1.00 over 4.5s) */
 @keyframes heroImageSlowZoom {
   0% {
     opacity: 0;
@@ -594,11 +594,11 @@ body {
   }
 }
 
-/* Tablet Subtle Cinematic Zoom-Out (1.08 -> 1.00 over 9s) */
+/* Tablet Subtle Cinematic Zoom-Out (1.09 -> 1.00 over 4.5s) */
 @keyframes heroImageSlowZoomTablet {
   0% {
     opacity: 0;
-    transform: scale(1.08);
+    transform: scale(1.09);
   }
   6% {
     opacity: 1;
@@ -609,7 +609,7 @@ body {
   }
 }
 
-/* Mobile Subtle Cinematic Zoom-Out (1.07 -> 1.00 over 9s) */
+/* Mobile Subtle Cinematic Zoom-Out (1.07 -> 1.00 over 4.5s) */
 @keyframes heroImageSlowZoomMobile {
   0% {
     opacity: 0;
@@ -655,7 +655,7 @@ body {
 
   .hero-image {
     object-position: center 40%;
-    animation: heroImageSlowZoomTablet 9s ease-out forwards;
+    animation: heroImageSlowZoomTablet 4.5s ease-out forwards;
   }
 
   .hero-logo-overlay {
@@ -676,7 +676,7 @@ body {
 
   .hero-image {
     object-position: center center;
-    animation: heroImageSlowZoomMobile 9s ease-out forwards;
+    animation: heroImageSlowZoomMobile 4.5s ease-out forwards;
   }
 
   .hero-logo-overlay {

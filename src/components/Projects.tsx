@@ -35,10 +35,10 @@ export const CATEGORIES = [
 
 export type CategoryId = (typeof CATEGORIES)[number]['id']
 
-// Data-driven project items across the 5 VASTAV categories
+// Data-driven projects with permanent project numbers that never change under category filters
 export const PROJECTS_DATA: ProjectItem[] = [
   {
-    id: 'res-01',
+    id: 'proj-01',
     number: '01',
     title: 'PROJECT 01',
     category: 'residential',
@@ -53,24 +53,9 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'A contemporary residence defined by monolithic masonry, strategic volumetric subtractions, and deep shading verandas tailored for warm climate living.',
   },
   {
-    id: 'com-01',
+    id: 'proj-02',
     number: '02',
     title: 'PROJECT 02',
-    category: 'commercial',
-    categoryLabel: 'COMMERCIAL',
-    image: '/assets/images/projects/commercial/01.jpeg',
-    layout: 'large-right',
-    location: 'BANGALORE, INDIA',
-    year: '2024',
-    discipline: 'COMMERCIAL ARCHITECTURE',
-    practice: 'VASTAV ARCHITECTS',
-    description:
-      'An expressive workplace structure that weaves natural ventilation, floor-to-ceiling daylighting, and raw architectural concrete.',
-  },
-  {
-    id: 'int-01',
-    number: '03',
-    title: 'PROJECT 03',
     category: 'interior',
     categoryLabel: 'INTERIOR',
     image: '/assets/images/projects/interior/01.jpeg',
@@ -83,7 +68,22 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Curated interior spaces celebrating bespoke teak millwork, custom bronze details, and quiet stone textures.',
   },
   {
-    id: 'lnd-01',
+    id: 'proj-03',
+    number: '03',
+    title: 'PROJECT 03',
+    category: 'commercial',
+    categoryLabel: 'COMMERCIAL',
+    image: '/assets/images/projects/commercial/01.jpeg',
+    layout: 'large-right',
+    location: 'BANGALORE, INDIA',
+    year: '2024',
+    discipline: 'COMMERCIAL ARCHITECTURE',
+    practice: 'VASTAV ARCHITECTS',
+    description:
+      'An expressive workplace structure that weaves natural ventilation, floor-to-ceiling daylighting, and raw architectural concrete.',
+  },
+  {
+    id: 'proj-04',
     number: '04',
     title: 'PROJECT 04',
     category: 'landscape',
@@ -98,7 +98,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Harmonious integration of indigenous flora, cascading water features, and porous paved courtyards.',
   },
   {
-    id: 'resort-01',
+    id: 'proj-05',
     number: '05',
     title: 'PROJECT 05',
     category: 'resorts',
@@ -113,28 +113,13 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'A hillside hospitality retreat sculpted into the natural terrain, oriented to frame panoramic valley vistas.',
   },
   {
-    id: 'res-02',
+    id: 'proj-06',
     number: '06',
     title: 'PROJECT 06',
-    category: 'residential',
-    categoryLabel: 'RESIDENTIAL',
-    image: '/assets/images/projects/residential/02.jpeg',
-    layout: 'small-left',
-    location: 'HYDERABAD, INDIA',
-    year: '2023',
-    discipline: 'RESIDENTIAL ARCHITECTURE',
-    practice: 'VASTAV ARCHITECTS',
-    description:
-      'Private urban sanctuary articulated through perforated terracotta jali screens and double-height landscaped courts.',
-  },
-  {
-    id: 'com-02',
-    number: '07',
-    title: 'PROJECT 07',
     category: 'commercial',
     categoryLabel: 'COMMERCIAL',
     image: '/assets/images/projects/commercial/02.jpeg',
-    layout: 'full-center',
+    layout: 'small-left',
     location: 'CHENNAI, INDIA',
     year: '2024',
     discipline: 'COMMERCIAL ARCHITECTURE',
@@ -143,7 +128,22 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'High-performance commercial pavilion integrating solar shading louvers with an open-plan central atrium.',
   },
   {
-    id: 'int-02',
+    id: 'proj-07',
+    number: '07',
+    title: 'PROJECT 07',
+    category: 'residential',
+    categoryLabel: 'RESIDENTIAL',
+    image: '/assets/images/projects/residential/02.jpeg',
+    layout: 'full-center',
+    location: 'HYDERABAD, INDIA',
+    year: '2023',
+    discipline: 'RESIDENTIAL ARCHITECTURE',
+    practice: 'VASTAV ARCHITECTS',
+    description:
+      'Private urban sanctuary articulated through perforated terracotta jali screens and double-height landscaped courts.',
+  },
+  {
+    id: 'proj-08',
     number: '08',
     title: 'PROJECT 08',
     category: 'interior',
@@ -158,7 +158,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Sculptural interior environment where indirect ambient illumination highlights limestone finishes and refined bronze profiles.',
   },
   {
-    id: 'lnd-02',
+    id: 'proj-09',
     number: '09',
     title: 'PROJECT 09',
     category: 'landscape',
@@ -173,7 +173,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Terraced botanical intervention designed around existing mature trees and native bioswales.',
   },
   {
-    id: 'resort-02',
+    id: 'proj-10',
     number: '10',
     title: 'PROJECT 10',
     category: 'resorts',
@@ -188,7 +188,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Boutique lakeside destination blending traditional regional stone carving with modern minimalist structural lines.',
   },
   {
-    id: 'res-03',
+    id: 'proj-11',
     number: '11',
     title: 'PROJECT 11',
     category: 'residential',
@@ -203,7 +203,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Cantilevered dwelling with expansive glass facades that dissolve boundaries between interior living and garden spaces.',
   },
   {
-    id: 'com-03',
+    id: 'proj-12',
     number: '12',
     title: 'PROJECT 12',
     category: 'commercial',
@@ -218,7 +218,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Flagship commercial tower utilizing low-e glazing and an innovative kinetic facade system for energy efficiency.',
   },
   {
-    id: 'int-03',
+    id: 'proj-13',
     number: '13',
     title: 'PROJECT 13',
     category: 'interior',
@@ -233,7 +233,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Sophisticated penthouse interior featuring acoustic timber slatting, seamless micro-cement, and custom art installations.',
   },
   {
-    id: 'lnd-03',
+    id: 'proj-14',
     number: '14',
     title: 'PROJECT 14',
     category: 'landscape',
@@ -248,7 +248,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Civic botanical parkway featuring shaded pedestrian walkways, rain gardens, and integrated stone seating nodes.',
   },
   {
-    id: 'resort-03',
+    id: 'proj-15',
     number: '15',
     title: 'PROJECT 15',
     category: 'resorts',
@@ -262,17 +262,92 @@ export const PROJECTS_DATA: ProjectItem[] = [
     description:
       'Eco-luxury resort villas elevated above the forest floor, crafted with renewable timber and rammed earth.',
   },
+  {
+    id: 'proj-16',
+    number: '16',
+    title: 'PROJECT 16',
+    category: 'commercial',
+    categoryLabel: 'COMMERCIAL',
+    image: '/assets/images/projects/commercial/04.jpeg',
+    layout: 'large-right',
+    location: 'MUMBAI, INDIA',
+    year: '2024',
+    discipline: 'COMMERCIAL ARCHITECTURE',
+    practice: 'VASTAV ARCHITECTS',
+    description:
+      'Urban commercial headquarters engineered with a high-performance double-skin facade and landscaped sky terraces.',
+  },
+  {
+    id: 'proj-17',
+    number: '17',
+    title: 'PROJECT 17',
+    category: 'residential',
+    categoryLabel: 'RESIDENTIAL',
+    image: '/assets/images/projects/residential/04.jpeg',
+    layout: 'medium-center',
+    location: 'HYDERABAD, INDIA',
+    year: '2024',
+    discipline: 'RESIDENTIAL ARCHITECTURE',
+    practice: 'VASTAV ARCHITECTS',
+    description:
+      'Minimalist courtyard villa structured with exposed concrete, local granite masonry, and expansive water reflection pools.',
+  },
+  {
+    id: 'proj-18',
+    number: '18',
+    title: 'PROJECT 18',
+    category: 'interior',
+    categoryLabel: 'INTERIOR',
+    image: '/assets/images/projects/interior/04.jpeg',
+    layout: 'small-right',
+    location: 'CHENNAI, INDIA',
+    year: '2023',
+    discipline: 'INTERIOR ARCHITECTURE',
+    practice: 'VASTAV ARCHITECTS',
+    description:
+      'Bespoke executive lounge interior highlighting fluted stone wall claddings, brushed brass accents, and subtle directional lighting.',
+  },
+  {
+    id: 'proj-19',
+    number: '19',
+    title: 'PROJECT 19',
+    category: 'landscape',
+    categoryLabel: 'LANDSCAPE',
+    image: '/assets/images/projects/landscape/04.jpeg',
+    layout: 'large-left',
+    location: 'BENGALURU, INDIA',
+    year: '2024',
+    discipline: 'LANDSCAPE ARCHITECTURE',
+    practice: 'VASTAV ARCHITECTS',
+    description:
+      'Contemplative zen garden featuring natural basalt stone arrangements, bamboo groves, and sculpted water channels.',
+  },
+  {
+    id: 'proj-20',
+    number: '20',
+    title: 'PROJECT 20',
+    category: 'resorts',
+    categoryLabel: 'RESORTS',
+    image: '/assets/images/projects/resorts/04.jpeg',
+    layout: 'large-center',
+    location: 'MUNNAR, INDIA',
+    year: '2024',
+    discipline: 'HOSPITALITY ARCHITECTURE',
+    practice: 'VASTAV ARCHITECTS',
+    description:
+      'Tea estate retreat perched on mountain contours, built with locally sourced slate stone and timber framing.',
+  },
 ]
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState<CategoryId>('all')
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState<number | null>(null)
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({})
 
   const sectionRef = useRef<HTMLElement>(null)
   const galleryRef = useRef<HTMLDivElement>(null)
 
-  // Filtered project list based on category
+  // Filtered projects based on active category filter
   const filteredProjects = PROJECTS_DATA.filter((project) => {
     if (activeCategory === 'all') return true
     return project.category === activeCategory
@@ -315,9 +390,9 @@ export default function Projects() {
     return () => clearTimeout(timer)
   }, [activeCategory])
 
-  // Lock body scroll when project modal is open
+  // Lock body scroll when modal is open
   useEffect(() => {
-    if (selectedProjectIndex !== null) {
+    if (selectedProjectId !== null) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
@@ -326,13 +401,13 @@ export default function Projects() {
     return () => {
       document.body.style.overflow = ''
     }
-  }, [selectedProjectIndex])
+  }, [selectedProjectId])
 
-  // Category selection handler
+  // Category filter selection handler
   const handleSelectCategory = (catId: CategoryId) => {
     if (catId === activeCategory) return
     setActiveCategory(catId)
-    setSelectedProjectIndex(null)
+    setSelectedProjectId(null)
 
     if (sectionRef.current) {
       const headerHeight =
@@ -346,32 +421,43 @@ export default function Projects() {
     }
   }
 
-  // Modal navigation
+  // Active project in modal
+  const currentModalIndex = filteredProjects.findIndex(
+    (p) => p.id === selectedProjectId
+  )
   const activeModalProject =
-    selectedProjectIndex !== null ? filteredProjects[selectedProjectIndex] : null
+    currentModalIndex !== -1 ? filteredProjects[currentModalIndex] : null
 
+  // Previous / Next handlers within the currently filtered projects list
   const handleNextProject = useCallback(() => {
-    setSelectedProjectIndex((prev) => {
-      if (prev === null) return null
-      return (prev + 1) % filteredProjects.length
-    })
-  }, [filteredProjects.length])
+    if (filteredProjects.length === 0) return
+    if (currentModalIndex === -1) {
+      setSelectedProjectId(filteredProjects[0].id)
+    } else {
+      const nextIndex = (currentModalIndex + 1) % filteredProjects.length
+      setSelectedProjectId(filteredProjects[nextIndex].id)
+    }
+  }, [filteredProjects, currentModalIndex])
 
   const handlePrevProject = useCallback(() => {
-    setSelectedProjectIndex((prev) => {
-      if (prev === null) return null
-      return (prev - 1 + filteredProjects.length) % filteredProjects.length
-    })
-  }, [filteredProjects.length])
+    if (filteredProjects.length === 0) return
+    if (currentModalIndex === -1) {
+      setSelectedProjectId(filteredProjects[filteredProjects.length - 1].id)
+    } else {
+      const prevIndex =
+        (currentModalIndex - 1 + filteredProjects.length) % filteredProjects.length
+      setSelectedProjectId(filteredProjects[prevIndex].id)
+    }
+  }, [filteredProjects, currentModalIndex])
 
   const handleCloseModal = useCallback(() => {
-    setSelectedProjectIndex(null)
+    setSelectedProjectId(null)
   }, [])
 
-  // Keyboard navigation
+  // Keyboard navigation for modal
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (selectedProjectIndex === null) return
+      if (selectedProjectId === null) return
 
       if (e.key === 'Escape') {
         handleCloseModal()
@@ -381,7 +467,7 @@ export default function Projects() {
         handlePrevProject()
       }
     },
-    [selectedProjectIndex, handleCloseModal, handleNextProject, handlePrevProject]
+    [selectedProjectId, handleCloseModal, handleNextProject, handlePrevProject]
   )
 
   useEffect(() => {
@@ -468,31 +554,31 @@ export default function Projects() {
           className="projects-gallery-wrapper"
         >
           <div className="projects-gallery">
-            {filteredProjects.map((project, index) => (
+            {filteredProjects.map((project) => (
               <article
                 key={project.id}
                 className={`projects-gallery-item projects-gallery-item--${project.layout}`}
-                aria-label={`${project.title} — ${project.categoryLabel}`}
+                aria-label={`Project ${project.number} — ${project.categoryLabel}`}
               >
                 <div className="projects-card-inner">
                   {/* Large Architectural Image Frame */}
                   <div
                     className="projects-image-frame"
-                    onClick={() => setSelectedProjectIndex(index)}
+                    onClick={() => setSelectedProjectId(project.id)}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault()
-                        setSelectedProjectIndex(index)
+                        setSelectedProjectId(project.id)
                       }
                     }}
-                    aria-label={`Open project details for ${project.title}`}
+                    aria-label={`Open project details for Project ${project.number}`}
                   >
                     <img
                       src={project.image}
-                      alt={`${project.title} — ${project.categoryLabel}`}
-                      loading={index < 3 ? 'eager' : 'lazy'}
+                      alt={`Project ${project.number} — ${project.categoryLabel}`}
+                      loading="lazy"
                       decoding="async"
                       className="projects-image"
                       onError={() => handleImageError(project.image)}
@@ -504,14 +590,18 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  {/* Editorial Project Caption Underneath Image */}
+                  {/* Editorial Project Caption with Permanent Number & Category Label */}
                   <footer className="project-item-caption">
-                    <span className="project-item-caption-number">
-                      {project.number}
-                    </span>
-                    <h3 className="project-item-caption-category">
-                      {project.categoryLabel}
-                    </h3>
+                    <div className="project-item-caption-left">
+                      <span className="project-item-caption-number">
+                        PROJECT {project.number}
+                      </span>
+                    </div>
+                    <div className="project-item-caption-right">
+                      <span className="project-item-caption-badge">
+                        [ {project.categoryLabel} ]
+                      </span>
+                    </div>
                   </footer>
                 </div>
               </article>
@@ -520,12 +610,12 @@ export default function Projects() {
         </div>
 
         {/* Project Detail Modal */}
-        {activeModalProject && selectedProjectIndex !== null && (
+        {activeModalProject && selectedProjectId !== null && (
           <div
             className="project-modal-backdrop"
             role="dialog"
             aria-modal="true"
-            aria-label={`${activeModalProject.title} Detail Modal`}
+            aria-label={`Project ${activeModalProject.number} Detail Modal`}
             onClick={handleCloseModal}
           >
             <div
@@ -540,7 +630,7 @@ export default function Projects() {
                   </span>
                   <span className="project-modal-meta-sep">—</span>
                   <span className="project-modal-meta-cat">
-                    {activeModalProject.categoryLabel}
+                    [ {activeModalProject.categoryLabel} ]
                   </span>
                 </div>
 
@@ -563,7 +653,7 @@ export default function Projects() {
                 <div className="project-modal-image-wrap">
                   <img
                     src={activeModalProject.image}
-                    alt={`${activeModalProject.title} detail`}
+                    alt={`Project ${activeModalProject.number} detail view`}
                     className="project-modal-image"
                   />
                 </div>
@@ -572,10 +662,10 @@ export default function Projects() {
                 <div className="project-modal-info">
                   <div className="project-modal-info-header">
                     <span className="project-modal-info-cat">
-                      {activeModalProject.categoryLabel}
+                      [ {activeModalProject.categoryLabel} ]
                     </span>
                     <h2 className="project-modal-info-title">
-                      {activeModalProject.title}
+                      PROJECT {activeModalProject.number}
                     </h2>
                   </div>
 
@@ -640,12 +730,12 @@ export default function Projects() {
                 </button>
 
                 <div className="project-modal-counter">
-                  <span>
-                    {String(selectedProjectIndex + 1).padStart(2, '0')}
+                  <span className="project-modal-counter-current">
+                    {currentModalIndex + 1}
                   </span>
                   <span className="project-modal-counter-sep">/</span>
-                  <span>
-                    {String(filteredProjects.length).padStart(2, '0')}
+                  <span className="project-modal-counter-total">
+                    {filteredProjects.length}
                   </span>
                 </div>
 

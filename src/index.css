@@ -1247,6 +1247,11 @@ img {
   padding: 0 2px;
 }
 
+.project-item-caption-left {
+  display: flex;
+  align-items: center;
+}
+
 .project-item-caption-number {
   font-family: 'Manrope', sans-serif;
   font-size: 11px;
@@ -1256,14 +1261,19 @@ img {
   color: #A7A49D;
 }
 
-.project-item-caption-category {
-  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  font-size: clamp(18px, 1.8vw, 24px);
-  font-weight: 400;
-  letter-spacing: 0.03em;
+.project-item-caption-right {
+  display: flex;
+  align-items: center;
+}
+
+.project-item-caption-badge {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #F2EFE8;
-  margin: 0;
+  opacity: 0.85;
 }
 
 /* Asymmetric Placements matching demo layout rhythm */

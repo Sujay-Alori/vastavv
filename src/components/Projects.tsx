@@ -428,38 +428,15 @@ export default function Projects() {
   const activeModalProject =
     currentModalIndex !== -1 ? filteredProjects[currentModalIndex] : null
 
-  // Open project modal handler
+  // Open project modal handler (strictly React state only)
   const handleOpenProject = (projectId: string) => {
     setSelectedProjectId(projectId)
-    // Push history state so browser Back closes modal instead of reloading or navigating away
-    if (typeof window !== 'undefined' && window.history && window.history.pushState) {
-      window.history.pushState({ vastavProjectModal: true }, '')
-    }
   }
 
-  // Close project modal handler
-  const handleCloseModal = useCallback((fromPopState = false) => {
-    setSelectedProjectId((prev) => {
-      if (prev !== null && !fromPopState && typeof window !== 'undefined') {
-        if (window.history.state?.vastavProjectModal) {
-          window.history.back()
-        }
-      }
-      return null
-    })
+  // Close project modal handler (strictly React state only - NO page navigation, NO history.back, NO reload)
+  const handleCloseModal = useCallback(() => {
+    setSelectedProjectId(null)
   }, [])
-
-  // Listen for browser Back button (popstate) to close modal without page reload
-  useEffect(() => {
-    const handlePopState = () => {
-      if (selectedProjectId !== null) {
-        handleCloseModal(true)
-      }
-    }
-
-    window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
-  }, [selectedProjectId, handleCloseModal])
 
   // Previous / Next handlers within the currently filtered projects list
   const handleNextProject = useCallback(() => {
@@ -484,25 +461,25 @@ export default function Projects() {
   }, [filteredProjects, currentModalIndex])
 
   // Keyboard navigation for modal
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedProjectId === null) return
 
       if (e.key === 'Escape') {
+        e.preventDefault()
         handleCloseModal()
       } else if (e.key === 'ArrowRight') {
+        e.preventDefault()
         handleNextProject()
       } else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
         handlePrevProject()
       }
-    },
-    [selectedProjectId, handleCloseModal, handleNextProject, handlePrevProject]
-  )
+    }
 
-  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [handleKeyDown])
+  }, [selectedProjectId, handleCloseModal, handleNextProject, handlePrevProject])
 
   const handleImageError = (src: string) => {
     setFailedImages((prev) => ({ ...prev, [src]: true }))
@@ -645,7 +622,7 @@ export default function Projects() {
             role="dialog"
             aria-modal="true"
             aria-label={`Project ${activeModalProject.number} Detail Modal`}
-            onClick={() => handleCloseModal()}
+            onClick={handleCloseModal}
           >
             <div
               className="project-modal-container"
@@ -663,20 +640,21 @@ export default function Projects() {
                   </span>
                 </div>
 
-                {/* Clearly visible ESC / CLOSE control */}
+                {/* Visible Close / ESC Button */}
                 <button
                   type="button"
                   className="project-modal-close-btn"
-                  onClick={() => handleCloseModal()}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleCloseModal()
+                  }}
                   aria-label="Close project"
                 >
                   <span className="project-modal-close-icon" aria-hidden="true">
                     ✕
                   </span>
-                  <span className="project-modal-close-text">CLOSE</span>
-                  <span className="project-modal-close-badge" aria-hidden="true">
-                    ESC
-                  </span>
+                  <span className="project-modal-close-text">ESC</span>
                 </button>
               </div>
 

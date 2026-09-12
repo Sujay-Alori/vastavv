@@ -1400,7 +1400,12 @@ img {
   padding: clamp(14px, 2vh, 20px) clamp(20px, 3vw, 36px);
   border-bottom: 1px solid rgba(242, 239, 232, 0.12);
   background-color: #0E1010;
-  z-index: 2;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .project-modal-topbar-meta {
@@ -1412,10 +1417,12 @@ img {
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+  min-width: 0;
 }
 
 .project-modal-meta-num {
   color: #A7A49D;
+  white-space: nowrap;
 }
 
 .project-modal-meta-sep {
@@ -1425,15 +1432,17 @@ img {
 .project-modal-meta-cat {
   color: #F2EFE8;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .project-modal-close-btn {
-  background: rgba(242, 239, 232, 0.08);
-  border: 1px solid rgba(242, 239, 232, 0.35);
+  background: rgba(242, 239, 232, 0.1);
+  border: 1px solid rgba(242, 239, 232, 0.4);
   color: #F2EFE8;
   cursor: pointer;
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   font-family: 'Manrope', sans-serif;
   font-size: 11px;
@@ -1441,10 +1450,15 @@ img {
   letter-spacing: 0.20em;
   text-transform: uppercase;
   padding: 8px 16px;
-  min-height: 40px;
-  opacity: 0.95;
+  min-height: 42px;
+  min-width: 44px;
+  opacity: 1 !important;
+  visibility: visible !important;
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
   touch-action: manipulation;
+  flex-shrink: 0;
+  margin-left: 12px;
+  z-index: 25;
 }
 
 .project-modal-close-btn:hover,
@@ -1788,7 +1802,23 @@ img {
   }
 
   .project-modal-topbar {
-    padding: 12px 16px;
+    padding: 12px 14px;
+  }
+
+  .project-modal-topbar-meta {
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+  }
+
+  .project-modal-close-btn {
+    padding: 6px 12px;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    min-height: 40px;
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .project-modal-image-wrap {

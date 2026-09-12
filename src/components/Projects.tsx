@@ -428,6 +428,39 @@ export default function Projects() {
   const activeModalProject =
     currentModalIndex !== -1 ? filteredProjects[currentModalIndex] : null
 
+  // Open project modal handler
+  const handleOpenProject = (projectId: string) => {
+    setSelectedProjectId(projectId)
+    // Push history state so browser Back closes modal instead of reloading or navigating away
+    if (typeof window !== 'undefined' && window.history && window.history.pushState) {
+      window.history.pushState({ vastavProjectModal: true }, '')
+    }
+  }
+
+  // Close project modal handler
+  const handleCloseModal = useCallback((fromPopState = false) => {
+    setSelectedProjectId((prev) => {
+      if (prev !== null && !fromPopState && typeof window !== 'undefined') {
+        if (window.history.state?.vastavProjectModal) {
+          window.history.back()
+        }
+      }
+      return null
+    })
+  }, [])
+
+  // Listen for browser Back button (popstate) to close modal without page reload
+  useEffect(() => {
+    const handlePopState = () => {
+      if (selectedProjectId !== null) {
+        handleCloseModal(true)
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [selectedProjectId, handleCloseModal])
+
   // Previous / Next handlers within the currently filtered projects list
   const handleNextProject = useCallback(() => {
     if (filteredProjects.length === 0) return
@@ -449,10 +482,6 @@ export default function Projects() {
       setSelectedProjectId(filteredProjects[prevIndex].id)
     }
   }, [filteredProjects, currentModalIndex])
-
-  const handleCloseModal = useCallback(() => {
-    setSelectedProjectId(null)
-  }, [])
 
   // Keyboard navigation for modal
   const handleKeyDown = useCallback(
@@ -564,13 +593,13 @@ export default function Projects() {
                   {/* Large Architectural Image Frame */}
                   <div
                     className="projects-image-frame"
-                    onClick={() => setSelectedProjectId(project.id)}
+                    onClick={() => handleOpenProject(project.id)}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault()
-                        setSelectedProjectId(project.id)
+                        handleOpenProject(project.id)
                       }
                     }}
                     aria-label={`Open project details for Project ${project.number}`}
@@ -616,7 +645,7 @@ export default function Projects() {
             role="dialog"
             aria-modal="true"
             aria-label={`Project ${activeModalProject.number} Detail Modal`}
-            onClick={handleCloseModal}
+            onClick={() => handleCloseModal()}
           >
             <div
               className="project-modal-container"
@@ -634,16 +663,20 @@ export default function Projects() {
                   </span>
                 </div>
 
+                {/* Clearly visible ESC / CLOSE control */}
                 <button
                   type="button"
                   className="project-modal-close-btn"
-                  onClick={handleCloseModal}
-                  aria-label="Close Project Details"
+                  onClick={() => handleCloseModal()}
+                  aria-label="Close project"
                 >
                   <span className="project-modal-close-icon" aria-hidden="true">
                     ✕
                   </span>
-                  <span className="project-modal-close-text">ESC</span>
+                  <span className="project-modal-close-text">CLOSE</span>
+                  <span className="project-modal-close-badge" aria-hidden="true">
+                    ESC
+                  </span>
                 </button>
               </div>
 

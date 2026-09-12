@@ -1428,34 +1428,57 @@ img {
 }
 
 .project-modal-close-btn {
-  background: transparent;
-  border: 1px solid rgba(242, 239, 232, 0.25);
+  background: rgba(242, 239, 232, 0.08);
+  border: 1px solid rgba(242, 239, 232, 0.35);
   color: #F2EFE8;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: 'Manrope', sans-serif;
-  font-size: 10.5px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.20em;
   text-transform: uppercase;
-  padding: 6px 14px;
-  min-height: 36px;
-  opacity: 0.85;
-  transition: opacity 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+  padding: 8px 16px;
+  min-height: 40px;
+  opacity: 0.95;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
   touch-action: manipulation;
 }
 
-.project-modal-close-btn:hover {
+.project-modal-close-btn:hover,
+.project-modal-close-btn:focus-visible {
   opacity: 1;
-  background-color: rgba(242, 239, 232, 0.08);
-  border-color: rgba(242, 239, 232, 0.65);
+  background-color: #F2EFE8;
+  color: #0B0D0D;
+  border-color: #F2EFE8;
+  transform: translateY(-1px);
 }
 
 .project-modal-close-icon {
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1;
+  font-weight: 600;
+}
+
+.project-modal-close-text {
+  font-weight: 600;
+}
+
+.project-modal-close-badge {
+  font-size: 9.5px;
+  font-weight: 500;
+  background: rgba(242, 239, 232, 0.18);
+  padding: 2px 6px;
+  letter-spacing: 0.12em;
+  border-radius: 2px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.project-modal-close-btn:hover .project-modal-close-badge {
+  background: rgba(11, 13, 13, 0.18);
+  color: #0B0D0D;
 }
 
 /* Modal Body */

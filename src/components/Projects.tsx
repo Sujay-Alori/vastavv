@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 
 export interface ProjectItem {
   id: string
@@ -615,156 +616,160 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* Project Detail Modal */}
-        {activeModalProject && selectedProjectId !== null && (
-          <div
-            className="project-modal-backdrop"
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Project ${activeModalProject.number} Detail Modal`}
-            onClick={handleCloseModal}
-          >
+        {/* Project Detail Modal — mounted at document.body via Portal to prevent header occlusion */}
+        {activeModalProject &&
+          selectedProjectId !== null &&
+          typeof document !== 'undefined' &&
+          createPortal(
             <div
-              className="project-modal-container"
-              onClick={(e) => e.stopPropagation()}
+              className="project-modal-backdrop"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Project ${activeModalProject.number} Detail Modal`}
+              onClick={handleCloseModal}
             >
-              {/* Modal Top Bar */}
-              <div className="project-modal-topbar">
-                <div className="project-modal-topbar-meta">
-                  <span className="project-modal-meta-num">
-                    PROJECT {activeModalProject.number}
-                  </span>
-                  <span className="project-modal-meta-sep">—</span>
-                  <span className="project-modal-meta-cat">
-                    [ {activeModalProject.categoryLabel} ]
-                  </span>
-                </div>
-
-                {/* Visible Close / ESC Button */}
-                <button
-                  type="button"
-                  className="project-modal-close-btn"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    handleCloseModal()
-                  }}
-                  aria-label="Close project"
-                >
-                  <span className="project-modal-close-icon" aria-hidden="true">
-                    ✕
-                  </span>
-                  <span className="project-modal-close-text">ESC</span>
-                </button>
-              </div>
-
-              {/* Modal Scrollable Body */}
-              <div className="project-modal-body">
-                {/* Large Architectural Photography Focus */}
-                <div className="project-modal-image-wrap">
-                  <img
-                    src={activeModalProject.image}
-                    alt={`Project ${activeModalProject.number} detail view`}
-                    className="project-modal-image"
-                  />
-                </div>
-
-                {/* Project Information & Meta Area */}
-                <div className="project-modal-info">
-                  <div className="project-modal-info-header">
-                    <span className="project-modal-info-cat">
+              <div
+                className="project-modal-container"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Top Bar */}
+                <div className="project-modal-topbar">
+                  <div className="project-modal-topbar-meta">
+                    <span className="project-modal-meta-num">
+                      PROJECT {activeModalProject.number}
+                    </span>
+                    <span className="project-modal-meta-sep">—</span>
+                    <span className="project-modal-meta-cat">
                       [ {activeModalProject.categoryLabel} ]
                     </span>
-                    <h2 className="project-modal-info-title">
-                      PROJECT {activeModalProject.number}
-                    </h2>
                   </div>
 
-                  <p className="project-modal-info-desc">
-                    {activeModalProject.description}
-                  </p>
-
-                  <div className="project-modal-meta-grid">
-                    <div className="project-modal-meta-item">
-                      <span className="project-modal-meta-label">DISCIPLINE</span>
-                      <span className="project-modal-meta-val">
-                        {activeModalProject.discipline}
-                      </span>
-                    </div>
-
-                    <div className="project-modal-meta-item">
-                      <span className="project-modal-meta-label">PRACTICE</span>
-                      <span className="project-modal-meta-val">
-                        {activeModalProject.practice}
-                      </span>
-                    </div>
-
-                    <div className="project-modal-meta-item">
-                      <span className="project-modal-meta-label">LOCATION</span>
-                      <span className="project-modal-meta-val">
-                        {activeModalProject.location}
-                      </span>
-                    </div>
-
-                    <div className="project-modal-meta-item">
-                      <span className="project-modal-meta-label">YEAR</span>
-                      <span className="project-modal-meta-val">
-                        {activeModalProject.year}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="project-modal-actions">
-                    <button
-                      type="button"
-                      className="project-modal-inquire-btn"
-                      onClick={handleInquireClick}
-                    >
-                      INQUIRE ABOUT THIS PROJECT →
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal Bottom Navigation Bar */}
-              <div className="project-modal-bottom-nav">
-                <button
-                  type="button"
-                  className="project-modal-nav-btn project-modal-nav-btn--prev"
-                  onClick={handlePrevProject}
-                  aria-label="Previous Project"
-                >
-                  <span className="project-modal-nav-arrow" aria-hidden="true">
-                    ←
-                  </span>
-                  <span>PREVIOUS</span>
-                </button>
-
-                <div className="project-modal-counter">
-                  <span className="project-modal-counter-current">
-                    {currentModalIndex + 1}
-                  </span>
-                  <span className="project-modal-counter-sep">/</span>
-                  <span className="project-modal-counter-total">
-                    {filteredProjects.length}
-                  </span>
+                  {/* Visible Close / ESC Button */}
+                  <button
+                    type="button"
+                    className="project-modal-close-btn"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      handleCloseModal()
+                    }}
+                    aria-label="Close project"
+                  >
+                    <span className="project-modal-close-icon" aria-hidden="true">
+                      ✕
+                    </span>
+                    <span className="project-modal-close-text">ESC</span>
+                  </button>
                 </div>
 
-                <button
-                  type="button"
-                  className="project-modal-nav-btn project-modal-nav-btn--next"
-                  onClick={handleNextProject}
-                  aria-label="Next Project"
-                >
-                  <span>NEXT</span>
-                  <span className="project-modal-nav-arrow" aria-hidden="true">
-                    →
-                  </span>
-                </button>
+                {/* Modal Scrollable Body */}
+                <div className="project-modal-body">
+                  {/* Large Architectural Photography Focus */}
+                  <div className="project-modal-image-wrap">
+                    <img
+                      src={activeModalProject.image}
+                      alt={`Project ${activeModalProject.number} detail view`}
+                      className="project-modal-image"
+                    />
+                  </div>
+
+                  {/* Project Information & Meta Area */}
+                  <div className="project-modal-info">
+                    <div className="project-modal-info-header">
+                      <span className="project-modal-info-cat">
+                        [ {activeModalProject.categoryLabel} ]
+                      </span>
+                      <h2 className="project-modal-info-title">
+                        PROJECT {activeModalProject.number}
+                      </h2>
+                    </div>
+
+                    <p className="project-modal-info-desc">
+                      {activeModalProject.description}
+                    </p>
+
+                    <div className="project-modal-meta-grid">
+                      <div className="project-modal-meta-item">
+                        <span className="project-modal-meta-label">DISCIPLINE</span>
+                        <span className="project-modal-meta-val">
+                          {activeModalProject.discipline}
+                        </span>
+                      </div>
+
+                      <div className="project-modal-meta-item">
+                        <span className="project-modal-meta-label">PRACTICE</span>
+                        <span className="project-modal-meta-val">
+                          {activeModalProject.practice}
+                        </span>
+                      </div>
+
+                      <div className="project-modal-meta-item">
+                        <span className="project-modal-meta-label">LOCATION</span>
+                        <span className="project-modal-meta-val">
+                          {activeModalProject.location}
+                        </span>
+                      </div>
+
+                      <div className="project-modal-meta-item">
+                        <span className="project-modal-meta-label">YEAR</span>
+                        <span className="project-modal-meta-val">
+                          {activeModalProject.year}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="project-modal-actions">
+                      <button
+                        type="button"
+                        className="project-modal-inquire-btn"
+                        onClick={handleInquireClick}
+                      >
+                        INQUIRE ABOUT THIS PROJECT →
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modal Bottom Navigation Bar */}
+                <div className="project-modal-bottom-nav">
+                  <button
+                    type="button"
+                    className="project-modal-nav-btn project-modal-nav-btn--prev"
+                    onClick={handlePrevProject}
+                    aria-label="Previous Project"
+                  >
+                    <span className="project-modal-nav-arrow" aria-hidden="true">
+                      ←
+                    </span>
+                    <span>PREVIOUS</span>
+                  </button>
+
+                  <div className="project-modal-counter">
+                    <span className="project-modal-counter-current">
+                      {currentModalIndex + 1}
+                    </span>
+                    <span className="project-modal-counter-sep">/</span>
+                    <span className="project-modal-counter-total">
+                      {filteredProjects.length}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="project-modal-nav-btn project-modal-nav-btn--next"
+                    onClick={handleNextProject}
+                    aria-label="Next Project"
+                  >
+                    <span>NEXT</span>
+                    <span className="project-modal-nav-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            </div>,
+            document.body
+          )}
       </div>
     </section>
   )

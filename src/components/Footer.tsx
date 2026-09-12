@@ -18,10 +18,7 @@ export default function Footer() {
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const headerHeightPx =
-      parseInt(
-        getComputedStyle(document.documentElement).getPropertyValue('--header-height'),
-        10
-      ) || 84
+      document.querySelector('.site-header')?.getBoundingClientRect().height || 84
 
     const elementTop = projectsElement.getBoundingClientRect().top + window.scrollY
 
@@ -39,10 +36,7 @@ export default function Footer() {
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const headerHeightPx =
-      parseInt(
-        getComputedStyle(document.documentElement).getPropertyValue('--header-height'),
-        10
-      ) || 84
+      document.querySelector('.site-header')?.getBoundingClientRect().height || 84
 
     const elementTop = contactElement.getBoundingClientRect().top + window.scrollY
 

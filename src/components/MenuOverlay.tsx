@@ -75,14 +75,8 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
       if (!target) return
 
       setTimeout(() => {
-        // Read header height from CSS custom property so it stays in sync
         const headerHeightPx =
-          parseInt(
-            getComputedStyle(document.documentElement).getPropertyValue(
-              '--header-height'
-            ),
-            10
-          ) || 84
+          document.querySelector('.site-header')?.getBoundingClientRect().height || 84
 
         const elementTop =
           target.getBoundingClientRect().top + window.scrollY

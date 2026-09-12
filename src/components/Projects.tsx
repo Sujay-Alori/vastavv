@@ -1,28 +1,64 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-export interface Category {
+export interface ProjectItem {
   id: string
-  name: string
+  number: string
+  title: string
   folder: string
+  coverLayout: 'large-center' | 'large-right' | 'large-left' | 'medium-center' | 'full-center'
   imageCount: number
 }
 
-export const CATEGORIES: Category[] = [
-  { id: 'residential', name: 'RESIDENTIAL', folder: 'residential', imageCount: 21 },
-  { id: 'commercial', name: 'COMMERCIAL', folder: 'commercial', imageCount: 21 },
-  { id: 'resorts', name: 'RESORTS', folder: 'resorts', imageCount: 21 },
-  { id: 'landscape', name: 'LANDSCAPE', folder: 'landscape', imageCount: 21 },
-  { id: 'interior', name: 'INTERIOR', folder: 'interior', imageCount: 21 },
+export const PROJECTS: ProjectItem[] = [
+  {
+    id: 'residential',
+    number: '01',
+    title: 'RESIDENTIAL',
+    folder: 'residential',
+    coverLayout: 'large-center',
+    imageCount: 21,
+  },
+  {
+    id: 'commercial',
+    number: '02',
+    title: 'COMMERCIAL',
+    folder: 'commercial',
+    coverLayout: 'large-right',
+    imageCount: 21,
+  },
+  {
+    id: 'interior',
+    number: '03',
+    title: 'INTERIOR',
+    folder: 'interior',
+    coverLayout: 'large-left',
+    imageCount: 21,
+  },
+  {
+    id: 'landscape',
+    number: '04',
+    title: 'LANDSCAPE',
+    folder: 'landscape',
+    coverLayout: 'large-center',
+    imageCount: 21,
+  },
+  {
+    id: 'resorts',
+    number: '05',
+    title: 'RESORTS',
+    folder: 'resorts',
+    coverLayout: 'large-right',
+    imageCount: 21,
+  },
 ]
 
-// Asymmetric layout rhythms for category gallery photos
-const LAYOUT_VARIANTS = [
-  'large-center',
-  'small-left',
+// Asymmetric editorial layout rhythms for additional gallery photos within an expanded project
+const ADDITIONAL_LAYOUT_VARIANTS = [
   'large-right',
-  'medium-center',
+  'small-left',
   'large-left',
   'small-right',
+  'medium-center',
   'full-center',
   'small-left',
   'large-right',
@@ -41,32 +77,19 @@ const LAYOUT_VARIANTS = [
 ]
 
 export default function Projects() {
-  const [activeCategoryId, setActiveCategoryId] = useState<string>('residential')
-  const [isGalleryOpen, setIsGalleryOpen] = useState<boolean>(false)
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [expandedProjectId, setExpandedProjectId] = useState<string | null>(null)
+  const [lightboxState, setLightboxState] = useState<{
+    projectId: string
+    imageIndex: number
+  } | null>(null)
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({})
 
-  const sectionRef = useRef<HTMLElement>(null)
-  const galleryRef = useRef<HTMLDivElement>(null)
+  const projectRefs = useRef<Record<string, HTMLElement | null>>({})
+  const expandedGalleryRef = useRef<HTMLDivElement | null>(null)
 
-  const activeCategory =
-    CATEGORIES.find((c) => c.id === activeCategoryId) || CATEGORIES[0]
-
-  // Generate list of image paths for the active category (01.jpeg ... 21.jpeg)
-  const categoryImages = Array.from({ length: activeCategory.imageCount }, (_, i) => {
-    const num = String(i + 1).padStart(2, '0')
-    return {
-      src: `/assets/images/projects/${activeCategory.folder}/${num}.jpeg`,
-      layout: LAYOUT_VARIANTS[i % LAYOUT_VARIANTS.length],
-      index: i,
-    }
-  }).filter((item) => !failedImages[item.src])
-
-  const coverImageSrc = `/assets/images/projects/${activeCategory.folder}/01.jpeg`
-
-  // Scroll reveal observer for gallery items
+  // Scroll reveal observer for expanded gallery items
   useEffect(() => {
-    if (!isGalleryOpen) return
+    if (!expandedProjectId) return
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
@@ -75,7 +98,7 @@ export default function Projects() {
     if (prefersReducedMotion) return
 
     const timer = setTimeout(() => {
-      const items = galleryRef.current?.querySelectorAll<HTMLElement>(
+      const items = expandedGalleryRef.current?.querySelectorAll<HTMLElement>(
         '.projects-gallery-item'
       )
       if (!items || items.length === 0) return
@@ -98,122 +121,93 @@ export default function Projects() {
       items.forEach((item) => observer.observe(item))
 
       return () => observer.disconnect()
-    }, 50)
+    }, 60)
 
     return () => clearTimeout(timer)
-  }, [isGalleryOpen, activeCategoryId])
+  }, [expandedProjectId])
 
-  // Switching category ALWAYS closes any open gallery and shows ONLY the new category's main image
-  const handleSelectCategory = (catId: string) => {
-    setActiveCategoryId(catId)
-    setIsGalleryOpen(false)
-    setLightboxIndex(null)
+  // Handle clicking a project's main image or expand trigger
+  const handleToggleProject = (projectId: string) => {
+    if (expandedProjectId === projectId) {
+      setExpandedProjectId(null)
+    } else {
+      setExpandedProjectId(projectId)
+      // Smoothly bring the newly expanded project into view
+      setTimeout(() => {
+        const el = projectRefs.current[projectId]
+        if (el) {
+          const headerHeight =
+            document.querySelector('.site-header')?.getBoundingClientRect().height || 84
+          const targetTop =
+            el.getBoundingClientRect().top + window.scrollY - headerHeight - 16
+          window.scrollTo({ top: targetTop, behavior: 'smooth' })
+        }
+      }, 50)
+    }
+  }
 
-    // Smooth scroll back to section top if user was scrolled down in a previous gallery
-    if (sectionRef.current) {
+  // Handle cover image click:
+  // If collapsed -> expands the project gallery.
+  // If already expanded -> opens full-screen lightbox for cover image (index 0).
+  const handleCoverClick = (project: ProjectItem) => {
+    if (expandedProjectId === project.id) {
+      setLightboxState({ projectId: project.id, imageIndex: 0 })
+    } else {
+      handleToggleProject(project.id)
+    }
+  }
+
+  const handleCloseExpanded = (projectId: string) => {
+    setExpandedProjectId(null)
+    const el = projectRefs.current[projectId]
+    if (el) {
       const headerHeight =
-        parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue(
-            '--header-height'
-          ),
-          10
-        ) || 84
+        document.querySelector('.site-header')?.getBoundingClientRect().height || 84
       const targetTop =
-        sectionRef.current.getBoundingClientRect().top +
-        window.scrollY -
-        headerHeight
+        el.getBoundingClientRect().top + window.scrollY - headerHeight - 16
       window.scrollTo({ top: targetTop, behavior: 'smooth' })
     }
   }
 
-  // Open full category gallery only on main image click
-  const handleOpenGallery = () => {
-    setIsGalleryOpen(true)
-    setTimeout(() => {
-      if (sectionRef.current) {
-        const headerHeight =
-          parseInt(
-            getComputedStyle(document.documentElement).getPropertyValue(
-              '--header-height'
-            ),
-            10
-          ) || 84
-        const targetTop =
-          sectionRef.current.getBoundingClientRect().top +
-          window.scrollY -
-          headerHeight
-        window.scrollTo({ top: targetTop, behavior: 'smooth' })
-      }
-    }, 50)
-  }
-
-  // Close gallery view and return to overview showing ONLY the active category's main image
-  const handleCloseGallery = () => {
-    setIsGalleryOpen(false)
-    setLightboxIndex(null)
-    if (sectionRef.current) {
-      const headerHeight =
-        parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue(
-            '--header-height'
-          ),
-          10
-        ) || 84
-      const targetTop =
-        sectionRef.current.getBoundingClientRect().top +
-        window.scrollY -
-        headerHeight
-      window.scrollTo({ top: targetTop, behavior: 'smooth' })
-    }
-  }
-
-  // Next category navigation helper — also closes gallery and shows next category's cover image only
-  const handleNextCategory = () => {
-    const currentIndex = CATEGORIES.findIndex((c) => c.id === activeCategoryId)
-    const nextIndex = (currentIndex + 1) % CATEGORIES.length
-    setActiveCategoryId(CATEGORIES[nextIndex].id)
-    setIsGalleryOpen(false)
-    setLightboxIndex(null)
-    if (sectionRef.current) {
-      const headerHeight =
-        parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue(
-            '--header-height'
-          ),
-          10
-        ) || 84
-      const targetTop =
-        sectionRef.current.getBoundingClientRect().top +
-        window.scrollY -
-        headerHeight
-      window.scrollTo({ top: targetTop, behavior: 'smooth' })
-    }
-  }
-
-  // Image error handling (allows replacing images in File Explorer with fewer files without breaking)
   const handleImageError = (src: string) => {
     setFailedImages((prev) => ({ ...prev, [src]: true }))
   }
 
+  // Active project data for lightbox
+  const currentLightboxProject = PROJECTS.find(
+    (p) => p.id === lightboxState?.projectId
+  )
+  const currentLightboxTotal = currentLightboxProject?.imageCount || 21
+
   // Lightbox keyboard navigation
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (lightboxIndex === null) return
+      if (!lightboxState || !currentLightboxProject) return
       if (e.key === 'Escape') {
-        setLightboxIndex(null)
+        setLightboxState(null)
       } else if (e.key === 'ArrowRight') {
-        setLightboxIndex((prev) =>
-          prev !== null ? (prev + 1) % categoryImages.length : null
+        setLightboxState((prev) =>
+          prev
+            ? {
+                ...prev,
+                imageIndex: (prev.imageIndex + 1) % currentLightboxTotal,
+              }
+            : null
         )
       } else if (e.key === 'ArrowLeft') {
-        setLightboxIndex((prev) =>
-          prev !== null
-            ? (prev - 1 + categoryImages.length) % categoryImages.length
+        setLightboxState((prev) =>
+          prev
+            ? {
+                ...prev,
+                imageIndex:
+                  (prev.imageIndex - 1 + currentLightboxTotal) %
+                  currentLightboxTotal,
+              }
             : null
         )
       }
     },
-    [lightboxIndex, categoryImages.length]
+    [lightboxState, currentLightboxProject, currentLightboxTotal]
   )
 
   useEffect(() => {
@@ -224,218 +218,226 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      ref={sectionRef}
       className="projects-section"
-      aria-label="Projects Portfolio"
+      aria-label="Selected Projects Portfolio"
     >
       <div className="projects-container">
-        {/* Top Header matching reference hierarchy */}
+        {/* Section Header */}
         <div className="projects-header">
-          <div className="projects-header-top">
-            <span className="projects-label">PORTFOLIO</span>
-            <h2 className="projects-heading">SELECTED WORKS</h2>
-          </div>
-
-          {/* Category Navigation Bar */}
-          <nav
-            className="projects-category-nav"
-            aria-label="Portfolio Category Navigation"
-          >
-            <div className="projects-category-list" role="tablist">
-              {CATEGORIES.map((category) => {
-                const isActive = category.id === activeCategoryId
-                return (
-                  <button
-                    key={category.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-controls={`panel-${category.id}`}
-                    id={`tab-${category.id}`}
-                    className={`projects-category-btn ${
-                      isActive ? 'projects-category-btn--active' : ''
-                    }`}
-                    onClick={() => handleSelectCategory(category.id)}
-                  >
-                    <span className="projects-category-text">
-                      {category.name}
-                    </span>
-                    {isActive && (
-                      <span
-                        className="projects-category-indicator"
-                        aria-hidden="true"
-                      />
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </nav>
+          <span className="projects-label">PORTFOLIO</span>
+          <h2 className="projects-heading">SELECTED WORKS</h2>
         </div>
 
-        {/* OVERVIEW VIEW: Shows ONLY the Main/Cover Image of the currently active category */}
-        {!isGalleryOpen ? (
-          <div
-            id={`panel-${activeCategory.id}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${activeCategory.id}`}
-            className="projects-cover-view"
-          >
-            <div
-              className="projects-cover-frame"
-              onClick={handleOpenGallery}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  handleOpenGallery()
+        {/* Editorial Project Stream */}
+        <div className="projects-list">
+          {PROJECTS.map((project) => {
+            const isExpanded = expandedProjectId === project.id
+            const coverSrc = `/assets/images/projects/${project.folder}/01.jpeg`
+
+            // Additional photographs (02.jpeg to 21.jpeg)
+            const additionalImages = Array.from(
+              { length: project.imageCount - 1 },
+              (_, idx) => {
+                const imageNum = String(idx + 2).padStart(2, '0')
+                return {
+                  src: `/assets/images/projects/${project.folder}/${imageNum}.jpeg`,
+                  layout:
+                    ADDITIONAL_LAYOUT_VARIANTS[
+                      idx % ADDITIONAL_LAYOUT_VARIANTS.length
+                    ],
+                  globalIndex: idx + 1, // 0 is cover, 1..20 are additional
                 }
-              }}
-              aria-label={`Open ${activeCategory.name} gallery`}
-            >
-              <img
-                src={coverImageSrc}
-                alt={`${activeCategory.name} architecture showcase`}
-                loading="eager"
-                decoding="async"
-                className="projects-cover-image"
-                onError={() => handleImageError(coverImageSrc)}
-              />
+              }
+            ).filter((item) => !failedImages[item.src])
 
-              {/* Refined editorial hover overlay & info */}
-              <div className="projects-cover-overlay">
-                <div className="projects-cover-meta">
-                  <span className="projects-cover-meta-category">
-                    {activeCategory.name}
-                  </span>
-                  <span className="projects-cover-meta-count">
-                    {activeCategory.imageCount} PHOTOGRAPHS
-                  </span>
-                </div>
-                <div className="projects-cover-action">
-                  <span className="projects-cover-action-text">
-                    EXPLORE COLLECTION
-                  </span>
-                  <span className="projects-cover-action-arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom editorial footnote */}
-            <div className="projects-cover-footer">
-              <div className="projects-cover-footer-left">
-                <span className="projects-cover-footer-label">
-                  CATEGORY ARCHIVE
-                </span>
-                <span className="projects-cover-footer-name">
-                  {activeCategory.name}
-                </span>
-              </div>
-              <button
-                type="button"
-                className="projects-open-btn"
-                onClick={handleOpenGallery}
+            return (
+              <article
+                key={project.id}
+                id={`project-${project.id}`}
+                ref={(el) => (projectRefs.current[project.id] = el)}
+                className={`project-entry ${
+                  isExpanded ? 'project-entry--expanded' : ''
+                }`}
+                aria-label={`Project ${project.number}: ${project.title}`}
               >
-                VIEW FULL GALLERY ({activeCategory.imageCount}) →
-              </button>
-            </div>
-          </div>
-        ) : (
-          /* EXPANDED CATEGORY GALLERY VIEW: Displays all category images in editorial layout */
-          <div
-            ref={galleryRef}
-            className="projects-category-gallery-view"
-            aria-label={`${activeCategory.name} Gallery`}
-          >
-            {/* Gallery Control Bar */}
-            <div className="projects-gallery-toolbar">
-              <button
-                type="button"
-                className="projects-back-btn"
-                onClick={handleCloseGallery}
-                aria-label="Back to Portfolio Categories"
-              >
-                <span className="projects-back-arrow" aria-hidden="true">
-                  ←
-                </span>
-                <span>BACK TO PORTFOLIO</span>
-              </button>
+                {/* Project Header Info */}
+                <header className="project-entry-header">
+                  <div className="project-entry-meta">
+                    <span className="project-entry-number">
+                      PROJECT {project.number}
+                    </span>
+                    <h3 className="project-entry-title">{project.title}</h3>
+                  </div>
 
-              <div className="projects-gallery-toolbar-meta">
-                <span className="projects-gallery-toolbar-category">
-                  {activeCategory.name}
-                </span>
-                <span className="projects-gallery-toolbar-divider">—</span>
-                <span className="projects-gallery-toolbar-count">
-                  {categoryImages.length} WORKS
-                </span>
-              </div>
-            </div>
+                  <button
+                    type="button"
+                    className="project-entry-toggle-btn"
+                    onClick={() => handleToggleProject(project.id)}
+                    aria-expanded={isExpanded}
+                    aria-controls={`gallery-${project.id}`}
+                  >
+                    <span className="project-entry-toggle-text">
+                      {isExpanded
+                        ? 'CLOSE PROJECT'
+                        : `EXPLORE COLLECTION (${project.imageCount})`}
+                    </span>
+                    <span
+                      className={`project-entry-toggle-icon ${
+                        isExpanded ? 'project-entry-toggle-icon--open' : ''
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {isExpanded ? '—' : '+'}
+                    </span>
+                  </button>
+                </header>
 
-            {/* Asymmetric Gallery Flow */}
-            <div className="projects-gallery">
-              {categoryImages.map((item) => (
+                {/* Main / Cover Image Presentation */}
                 <div
-                  key={item.src}
-                  className={`projects-gallery-item projects-gallery-item--${item.layout}`}
+                  className={`project-cover-container project-cover-container--${project.coverLayout}`}
                 >
                   <div
-                    className="projects-image-frame"
-                    onClick={() => setLightboxIndex(item.index)}
+                    className="project-cover-frame"
+                    onClick={() => handleCoverClick(project)}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault()
-                        setLightboxIndex(item.index)
+                        handleCoverClick(project)
                       }
                     }}
-                    aria-label={`View image ${item.index + 1} of ${categoryImages.length}`}
+                    aria-label={
+                      isExpanded
+                        ? `View ${project.title} cover image in full size`
+                        : `Open ${project.title} project gallery`
+                    }
                   >
-                    <img
-                      src={item.src}
-                      alt={`${activeCategory.name} project image ${item.index + 1}`}
-                      loading={item.index < 3 ? 'eager' : 'lazy'}
-                      decoding="async"
-                      className="projects-image"
-                      onError={() => handleImageError(item.src)}
-                    />
+                    {!failedImages[coverSrc] ? (
+                      <img
+                        src={coverSrc}
+                        alt={`${project.title} architecture showcase`}
+                        loading="lazy"
+                        decoding="async"
+                        className="project-cover-image"
+                        onError={() => handleImageError(coverSrc)}
+                      />
+                    ) : (
+                      <div className="project-image-fallback">
+                        <span>{project.title}</span>
+                      </div>
+                    )}
+
+                    {/* Editorial hover hint overlay */}
+                    <div className="project-cover-overlay">
+                      <div className="project-cover-overlay-info">
+                        <span className="project-cover-overlay-num">
+                          {project.number}
+                        </span>
+                        <span className="project-cover-overlay-title">
+                          {project.title}
+                        </span>
+                      </div>
+                      <div className="project-cover-overlay-action">
+                        <span>
+                          {isExpanded
+                            ? 'FULLSCREEN VIEW ↗'
+                            : 'EXPLORE COLLECTION ↗'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
 
-            {/* Gallery Bottom Navigation */}
-            <div className="projects-gallery-bottom-nav">
-              <button
-                type="button"
-                className="projects-gallery-bottom-btn"
-                onClick={handleCloseGallery}
-              >
-                ← BACK TO CATEGORIES
-              </button>
-              <button
-                type="button"
-                className="projects-gallery-bottom-btn projects-gallery-bottom-btn--next"
-                onClick={handleNextCategory}
-              >
-                NEXT CATEGORY →
-              </button>
-            </div>
-          </div>
-        )}
+                {/* EXPANDED GALLERY: Shown ONLY when this project is active */}
+                {isExpanded && (
+                  <div
+                    id={`gallery-${project.id}`}
+                    ref={expandedGalleryRef}
+                    className="project-expanded-gallery-section"
+                    role="region"
+                    aria-label={`${project.title} Additional Works`}
+                  >
+                    {/* Editorial Divider & Gallery Subheader */}
+                    <div className="project-expanded-divider">
+                      <span className="project-expanded-divider-label">
+                        {project.title} — PHOTOGRAPHIC ARCHIVE
+                      </span>
+                      <span className="project-expanded-divider-count">
+                        {additionalImages.length + 1} PHOTOGRAPHS
+                      </span>
+                    </div>
 
-        {/* Minimalist Lightbox Modal */}
-        {lightboxIndex !== null && categoryImages[lightboxIndex] && (
+                    {/* Asymmetric Gallery Flow for Additional Images */}
+                    <div className="projects-gallery">
+                      {additionalImages.map((item) => (
+                        <div
+                          key={item.src}
+                          className={`projects-gallery-item projects-gallery-item--${item.layout}`}
+                        >
+                          <div
+                            className="projects-image-frame"
+                            onClick={() =>
+                              setLightboxState({
+                                projectId: project.id,
+                                imageIndex: item.globalIndex,
+                              })
+                            }
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault()
+                                setLightboxState({
+                                  projectId: project.id,
+                                  imageIndex: item.globalIndex,
+                                })
+                              }
+                            }}
+                            aria-label={`View ${project.title} photo ${item.globalIndex + 1}`}
+                          >
+                            <img
+                              src={item.src}
+                              alt={`${project.title} photo ${item.globalIndex + 1}`}
+                              loading="lazy"
+                              decoding="async"
+                              className="projects-image"
+                              onError={() => handleImageError(item.src)}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Bottom Collapse Action */}
+                    <div className="project-expanded-footer">
+                      <button
+                        type="button"
+                        className="project-collapse-btn"
+                        onClick={() => handleCloseExpanded(project.id)}
+                        aria-label={`Collapse ${project.title} gallery`}
+                      >
+                        <span className="project-collapse-arrow" aria-hidden="true">
+                          ↑
+                        </span>
+                        <span>CLOSE {project.title} GALLERY</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </article>
+            )
+          })}
+        </div>
+
+        {/* Minimalist Editorial Lightbox Modal */}
+        {lightboxState && currentLightboxProject && (
           <div
             className="projects-lightbox"
             role="dialog"
             aria-modal="true"
-            aria-label="Image lightbox view"
-            onClick={() => setLightboxIndex(null)}
+            aria-label={`${currentLightboxProject.title} Lightbox`}
+            onClick={() => setLightboxState(null)}
           >
             <div
               className="projects-lightbox-content"
@@ -444,7 +446,7 @@ export default function Projects() {
               <button
                 type="button"
                 className="projects-lightbox-close"
-                onClick={() => setLightboxIndex(null)}
+                onClick={() => setLightboxState(null)}
                 aria-label="Close Lightbox"
               >
                 ✕
@@ -454,27 +456,40 @@ export default function Projects() {
                 type="button"
                 className="projects-lightbox-nav projects-lightbox-nav--prev"
                 onClick={() =>
-                  setLightboxIndex(
-                    (lightboxIndex - 1 + categoryImages.length) %
-                      categoryImages.length
+                  setLightboxState((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          imageIndex:
+                            (prev.imageIndex - 1 + currentLightboxTotal) %
+                            currentLightboxTotal,
+                        }
+                      : null
                   )
                 }
-                aria-label="Previous Image"
+                aria-label="Previous Photograph"
               >
                 ←
               </button>
 
               <div className="projects-lightbox-image-wrap">
                 <img
-                  src={categoryImages[lightboxIndex].src}
-                  alt={`${activeCategory.name} image ${lightboxIndex + 1}`}
+                  src={`/assets/images/projects/${
+                    currentLightboxProject.folder
+                  }/${String(lightboxState.imageIndex + 1).padStart(2, '0')}.jpeg`}
+                  alt={`${currentLightboxProject.title} photograph ${
+                    lightboxState.imageIndex + 1
+                  }`}
                   className="projects-lightbox-img"
                 />
                 <div className="projects-lightbox-caption">
-                  <span>{activeCategory.name}</span>
-                  <span>
-                    {String(lightboxIndex + 1).padStart(2, '0')} /{' '}
-                    {String(categoryImages.length).padStart(2, '0')}
+                  <span className="projects-lightbox-caption-title">
+                    PROJECT {currentLightboxProject.number} —{' '}
+                    {currentLightboxProject.title}
+                  </span>
+                  <span className="projects-lightbox-caption-count">
+                    {String(lightboxState.imageIndex + 1).padStart(2, '0')} /{' '}
+                    {String(currentLightboxTotal).padStart(2, '0')}
                   </span>
                 </div>
               </div>
@@ -483,11 +498,17 @@ export default function Projects() {
                 type="button"
                 className="projects-lightbox-nav projects-lightbox-nav--next"
                 onClick={() =>
-                  setLightboxIndex(
-                    (lightboxIndex + 1) % categoryImages.length
+                  setLightboxState((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          imageIndex:
+                            (prev.imageIndex + 1) % currentLightboxTotal,
+                        }
+                      : null
                   )
                 }
-                aria-label="Next Image"
+                aria-label="Next Photograph"
               >
                 →
               </button>

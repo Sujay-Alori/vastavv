@@ -191,6 +191,7 @@ export default function Contact() {
                   id="contact-email"
                   className="contact-field-input"
                   type="email"
+                  inputMode="email"
                   name="email"
                   placeholder="your@email.com"
                   value={formData.email}
@@ -217,6 +218,7 @@ export default function Contact() {
                   id="contact-phone"
                   className="contact-field-input"
                   type="tel"
+                  inputMode="tel"
                   name="phone"
                   placeholder="+91 000 000 0000"
                   value={formData.phone}
